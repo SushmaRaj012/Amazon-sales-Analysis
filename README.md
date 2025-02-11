@@ -14,3 +14,36 @@ Dataset Columns:
 ![image](https://github.com/user-attachments/assets/8da62bd4-f365-4289-becb-7bc59d5681a8)
 
 
+## Approach used
+
+Data preparation: we will clean preprocess the dataset for analysis.
+
+Exploratory data analysis: We'll analyze the data to understand the distribution of products by categories, customer ratings, and reviews.
+
+Data visualization: We'll visualize the data to identify trends and patterns.
+
+**Data Preparation Process in SQL**
+
+1. **Data Import**
+   - Loaded the dataset into SQL
+
+   
+2. **Data Inspection**
+   - Checked for missing values in  columns to identify gaps.
+   - Identified duplicate records to ensure data uniqueness.
+   - Verified data types to confirm consistency and accuracy.
+
+3. **Data Cleaning**
+   - Remove duplicate records to maintain data integrity.
+   - Handled missing values.
+   - Standardized date formats and corrected inconsistencies in categorical data.
+
+4. **Data Transformation**
+   - Created new calculated fields where necessary to enhance analysis.
+   - Converted data types where required for consistency and accuracy.
+   - Standardized naming conventions and formatted values appropriately.
+
+5. **Data Saving**
+   - Saved the cleaned and transformed dataset into a new table to preserve the original data.
+   - Synced the final dataset from SQL to Power BI for visualization and insights.
+
