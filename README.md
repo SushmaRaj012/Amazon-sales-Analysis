@@ -50,9 +50,10 @@ Dataset Columns:
 **Data Preparation** 
 From the **Discounted_Price** column:
  - Removed all Rupees (₹) symbols:
-UPDATE amazon.product
+
+**UPDATE amazon.product
 SET discounted_price = REPLACE(discounted_price, '₹', '')
-WHERE discounted_price LIKE '₹%';
+WHERE discounted_price LIKE '₹%';**
 
  - Removed all comma (,) symbols:
 UPDATE amazon.product
