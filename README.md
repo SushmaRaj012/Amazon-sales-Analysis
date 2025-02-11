@@ -46,3 +46,20 @@ Dataset Columns:
    - Saved the cleaned and transformed dataset into a new table to preserve the original data.
    - Synced the final dataset from SQL to Power BI for visualization and insights.
 
+
+**Data Preparation** 
+From the **Discounted_Price** column:
+ - Removed all Rupees (₹) symbols:
+UPDATE amazon.product
+SET discounted_price = REPLACE(discounted_price, '₹', '')
+WHERE discounted_price LIKE '₹%';
+
+ - Removed all comma (,) symbols:
+UPDATE amazon.product
+SET Discounted_Price = replace(Discounted_Price, ",", "")
+WHERE discounted_price LIKE '%,%';
+
+ - Removed all extra spaces between numbers:
+UPDATE amazon.product
+SET discounted_price = REPLACE(discounted_price, ' ', '')
+WHERE discounted_price LIKE '% %';
