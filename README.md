@@ -16,11 +16,11 @@ Dataset Columns:
 
 ## Approach used
 
-Data preparation: we will clean preprocess the dataset for analysis.
+**Data preparation**: we will clean preprocess the dataset for analysis.
 
-Exploratory data analysis: We'll analyze the data to understand the distribution of products by categories, customer ratings, and reviews.
+**Exploratory data analysis**: We'll analyze the data to understand the distribution of products by categories, customer ratings, and reviews.
 
-Data visualization: We'll visualize the data to identify trends and patterns.
+**Data visualization**: We'll visualize the data to identify trends and patterns.
 
 **Data Preparation Process in SQL**
 
