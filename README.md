@@ -11,7 +11,8 @@ it consists of 1465 rows and 16 columns.
 
 Dataset Columns:
 
-![image](https://github.com/user-attachments/assets/8da62bd4-f365-4289-becb-7bc59d5681a8)
+![image](https://github.com/user-attachments/assets/4742c738-12f7-4673-b0ff-aa677b66d93f)
+
 
 
 ## Approach used
