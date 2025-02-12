@@ -47,16 +47,16 @@ ALTER TABLE amazon.product
 MODIFY COLUMN actual_price FLOAT; 
 
 
-## Total Rows = 1465
-#The rating column has a value with an incorrect character, so i will exclude It Contains 
+** Total Rows = 1465 **
+**The rating column has a value with an incorrect character, so i will exclude it from the dataset** 
 -- I checked which row has "|" & removed the entire row taking the product ID SO the row_Count is 1464 now
 ## Row_count = 1464
 
 DELETE FROM amazon.product
 WHERE product_id = 'B08L12N5H1';
 
-## "rating_count" column Tranformation 
-## Removed all Rupees Symbol 
+** "rating_count" column Tranformation **
+** Removed all Rupees Symbol from discounted_price**
 UPDATE amazon.product
 SET discounted_price = REPLACE(discounted_price, '₹', '')
 WHERE discounted_price LIKE '₹%';
@@ -66,12 +66,12 @@ UPDATE amazon.product
 SET rating_count = replace(rating_count, ",", "")
 WHERE rating_count LIKE '%,%';
 
-## Removed all Extra Space b/w numbers 
+** Removed all Extra Space b/w numbers **
 UPDATE amazon.product
 SET rating_count = REPLACE(discounted_price, ' ', '')
 WHERE rating_count LIKE '% %';
 
-# Check for missing values 
+** Check for missing values **
 SELECT *
 FROM amazon.product
 WHERE product_id IS NULL OR product_id = ''
@@ -90,29 +90,25 @@ WHERE product_id IS NULL OR product_id = ''
    OR product_link IS NULL OR product_link = ''
    ;
 
-#To remove rows with missing information, we'll use the dropna() function. We only want to keep rows with 
-# all the required information because missing values can affect the accuracy of our analysis. 
-# In this case, we will remove the two rows that contain blank values for rating_count##
-
+**Removing the enpty rows**
 Delete FROM amazon.product
 where rating_count = ""; ## 2 Rows had Empty value 
 
 ## rows_Count = '1462'
  select count(*) FROM amazon.product;
  
-## Rating weighted - This column weighs the average rating by the number of ratings, giving more weight to ratings with a large number of raters. 
- ## Craeted the Column 
+** Rating weighted - This column weighs the average rating by the number of ratings, giving more weight to ratings with a large number of raters. Craeted the Rating weighted Column **. 
 ALTER TABLE amazon.product
 ADD COLUMN rating_weighted FLOAT NULL DEFAULT NULL;
 
 
-## Performimg the weighted Rating Cal 
+## Performimg the weighted Rating Calulation
 Update amazon.product
 set rating_weighted = rating*rating_count ;
 
 
-## Extracting both the main and final categories from the category column
-## 1. Creating the main and final categories Column 
+**Extracting Main and Final Categories from a Hierarchical Category Column**
+** 1. Creating the main and final categories Column **
 Alter Table amazon.product
 Add Column Main_Category Text Null Default null,
 Add Column Final_Category TEXT NULL DEFAULT NULL; 
@@ -129,7 +125,7 @@ FROM amazon.product
 group by  Main_Category
 order by No_of_Products DESC;
 
-# Analyzing distribution of products by last category
+# Analyzing distribution of products by final category
 SELECT DISTINCT Final_Category, Main_Category,
 COUNT(product_id) AS No_of_Product
 FROM amazon.product 
@@ -157,9 +153,10 @@ FROM (
 ) AS grouped_ratings
 GROUP BY rating_group
 ORDER BY review_count DESC;
+
  
 
-# Calculate the top main categories Avg Rating 
+**Calculate the top main categories Avg Rating **
 select distinct Main_Category, round(avg(rating),2) as Avg_Rating
 FROM amazon.product
 group by  Main_Category
@@ -187,7 +184,7 @@ group by  Main_Category ,Final_Category, rating, product_id
 Order by Rating Desc
 Limit 5;
 
-## Calculate the top sub categories by Rating
+** Calculate the top sub categories by Rating**
 SELECT 
     Final_Category, 
     AVG(rating) AS avg_rating,
@@ -197,7 +194,7 @@ GROUP BY Final_Category
 ORDER BY avg_rating DESC
 LIMIT 10;
  
- ## Calculate the Bottom sub categories by Rating
+** Calculate the Bottom sub categories by Rating **
  SELECT 
     Final_Category,
     round(AVG(rating),2) AS avg_rating,
@@ -224,7 +221,7 @@ GROUP BY Main_Category
 ORDER BY  Least_Rating ASC
 LIMIT 10;
 
--- Top Rated Products By Final Category 
+** Top Rated Products By Final Category **
 with RANKING AS (
 select  SUBSTRING_INDEX(product_name, ",", 1) AS Product_name, Final_Category, -- Shortening the Product name
 row_number() over (Partition by Final_Category order by rating DESC) AS Ranking , rating 
@@ -234,7 +231,7 @@ WHERE Ranking = 1
 ORDER BY rating DESC
 Limit 10;
 
--- Least Rated Products by Final Category 
+** Least Rated Products by Final Category ** 
 WITH RANKING AS (
 select SUBSTRING_INDEX(product_name, "," , 1) AS Product_name, Final_Category, rating,
  row_number() over(partition by Final_Category order by Rating ASC) AS Ranking
@@ -245,19 +242,19 @@ WHERE Ranking = 1
 ORDER BY rating ASC
 LIMIT 10;
 
--- Top Rated Products
+** Top Rated Products **
 SELECT Product_name, rating 
 FROM amazon.product
 ORDER BY rating DESC
 LIMIT 10 ;
 
--- Bottom Rated Products
+** Bottom Rated Products **
 SELECT Product_name, rating 
 FROM amazon.product
 ORDER BY rating ASC
 LIMIT 10 ;
 
--- Top Products By Rating Percentage
+** Top Products By Rating Percentage**
 
 -- Reviews and Ratings Per Product
 Select Final_Category, count(Distinct(product_id)) as product_count, 
@@ -267,7 +264,7 @@ group by Final_Category
 ORDER BY product_count DESC
 Limit 20; 
 
--- 1. Calculate the rating percentage for each product
+** Calculate the rating percentage for each product **
 SELECT 
     product_id, 
     product_name, 
@@ -277,13 +274,13 @@ FROM amazon.product
 ORDER BY rating_percentage DESC
 LIMIT 10;
 
-## Discount Perc by Category wise 
+** Discount Perc by Category wise **
 select Main_Category, round(avg(discount_percentage),2) as Avg_discount_percentage
 FROM amazon.product
 group by Main_Category
 order by Avg_discount_percentage DESC;
 
-## Discount Perc by Fianl Category wise 
+** Discount Perc by Fianl Category wise **
 Select Final_Category, Avg_discount_percentage from 
 (select Final_Category, round(avg(discount_percentage),2) as Avg_discount_percentage
 FROM amazon.product
@@ -293,7 +290,7 @@ where Avg_discount_percentage > 0
 Limit 15;
 
 
--- word cloud 
+** word cloud 
 WITH word_split AS (
     SELECT  LOWER(SUBSTRING_INDEX(SUBSTRING_INDEX(review_content, ' ', n.n), ' ', -1)) AS word
     FROM 
@@ -320,7 +317,7 @@ GROUP BY word
 ORDER BY frequency DESC
 LIMIT 200;
 
---  Create a frequency table for user IDs
+** Create a frequency table for user IDs *8
 SELECT 
     user_id,
     COUNT(user_id) AS frequency
@@ -331,7 +328,7 @@ GROUP BY
 ORDER BY 
     frequency DESC;
 
--- Extract the user ID with the highest frequency (most frequent user ID)
+** Extract the user ID with the highest frequency (most frequent user ID)
 SELECT 
     user_id , frequency
 FROM 
