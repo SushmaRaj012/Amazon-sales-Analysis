@@ -1,49 +1,48 @@
+** checking all the data rows and column**
 SELECT * FROM amazon.product;
--- All_rows = 1465 
 
-SET SQL_SAFE_UPDATES = 0;
 
-## Discounted_Price Tranformation 
-## Removed all Rupees Symbol 
+** Discounted_Price Tranformation **
+** Removed all Rupees Symbol from Discounted_Price column **
 UPDATE amazon.product
 SET discounted_price = REPLACE(discounted_price, '₹', '')
 WHERE discounted_price LIKE '₹%';
 
-## Removed all Comma(,) Symbol 
+** Removed all Comma(,) Symbol from Discounted_Price column **
 UPDATE amazon.product
 SET Discounted_Price = replace(Discounted_Price, ",", "")
 WHERE discounted_price LIKE '%,%';
 
-## Removed all Extra Soace b/w numbers 
+**Removed all Extra Space b/w numbers from Discounted_Price column **
 UPDATE amazon.product
 SET discounted_price = REPLACE(discounted_price, ' ', '')
 WHERE discounted_price LIKE '% %';
 
-## discount_percentage % Remove from Site
+** Removing % Remove from discount_percentage column**
 UPDATE amazon.product
 SET discount_percentage = replace(discount_percentage, "%","");
 
-# Convert the cleaned 'discounted_price' to numeric type
+** changing the 'discounted_price' datatype to numeric type**
 ALTER TABLE amazon.product
-MODIFY COLUMN discounted_price FLOAT
+MODIFY COLUMN discounted_price FLOAT;
  
-##actual_price Tranformation 
-## Removed all Rupees Symbol 
+**actual_price column Tranformation** 
+**Removed all Rupees Symbol from actual_price**
 UPDATE amazon.product
 SET actual_price = REPLACE(actual_price, '₹', '')
 WHERE actual_price LIKE '₹%';
 
-## Removed all Comma(,) Symbol 
+** Removed all Comma(,) Symbol from actual_price**
 UPDATE amazon.product
 SET actual_price = replace(actual_price, ",", "")
 WHERE actual_price LIKE '%,%';
 
-## Removed all Extra Space b/w numbers 
+** Removed all Extra Space b/w numbers from actual_price**
 UPDATE amazon.product
 SET actual_price = REPLACE(actual_price, ' ', '')
 WHERE actual_price LIKE '% %';
 
-##  Convert the cleaned 'actual_price' to numeric type
+** Convert 'actual_price' column datatype to numeric type **
 ALTER TABLE amazon.product
 MODIFY COLUMN actual_price FLOAT; 
 
